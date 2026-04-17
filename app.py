@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px 
 
 st.title("📊 Asistente de Estadística - UPChiapas")
 
@@ -15,7 +16,7 @@ if archivo is not None:
     
     st.header("2. Visualización de Distribuciones")
     
-    columna = st.selectbox("Selecciona una columna para analizar", df.columns)
+    columna = st.selectbox("Seleccione una columna para analizar", df.columns)
     
     st.subheader("Análisis de la distribución")
     pregunta_1 = st.radio("¿La distribución parece normal?", ["Sí", "No", "No estoy seguro"])
@@ -23,3 +24,18 @@ if archivo is not None:
     
 else:
     st.info("Esperando archivo CSV...")
+
+if columna:
+    st.subheader(f"Análisis de: {columna}")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("### Histograma")
+        fig_hist = px.histogram(df, x=columna, marginal="rug", title=f"Histograma de {columna}")
+        st.plotly_chart(fig_hist)
+        
+    with col2:
+        st.write("### Boxplot (Caja y Bigotes)")
+        fig_box = px.box(df, y=columna, title=f"Boxplot de {columna}")
+        st.plotly_chart(fig_box)
