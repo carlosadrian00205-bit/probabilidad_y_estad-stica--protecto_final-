@@ -14,7 +14,7 @@ if archivo is not None:
     st.success("¡Archivo cargado!")
     
     st.subheader("Vista previa")
-    st.dataframe(df.head())
+    st.dataframe(df)
     
     st.header("2. Visualización de Distribuciones")
     
@@ -27,7 +27,7 @@ if archivo is not None:
         
         col1, col2 = st.columns(2)
         
-        with col1:
+        with col1:              
             st.write("### Histograma")
             fig_hist = px.histogram(df, x=columna, marginal="rug", 
                                    title=f"Histograma de {columna}",
