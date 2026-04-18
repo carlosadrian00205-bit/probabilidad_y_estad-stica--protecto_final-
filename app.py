@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px 
 
-# Configuración básica
+st.set_option('deprecation.showPyplotGlobalUse', False)
+
 st.set_page_config(page_title="Asistente Estadístico UPChiapas", layout="wide")
 
 st.title("📊 Asistente de Estadística - UPChiapas")
 
-# --- 1. CARGA DE DATOS ---
 st.header("1. Carga de datos")
 archivo = st.file_uploader("Sube tu archivo CSV", type=["csv"])
 
@@ -17,17 +17,14 @@ if archivo is not None:
     
     st.subheader("Vista previa")
     st.dataframe(df.head())
-    
-    # --- 2. VISUALIZACIÓN DE DISTRIBUCIONES ---
+
     st.header("2. Visualización de Distribuciones")
     
-    # Solo mostramos columnas que tengan números
     columnas_numericas = df.select_dtypes(include=['number']).columns
     
     if len(columnas_numericas) > 0:
         columna = st.selectbox("Selecciona una columna para analizar", columnas_numericas)
         
-        # Las gráficas deben ir DENTRO del bloque donde el archivo existe
         st.subheader(f"Análisis visual de: {columna}")
         
         col1, col2 = st.columns(2)
@@ -45,7 +42,6 @@ if archivo is not None:
                              color_discrete_sequence=['#EF553B'])
             st.plotly_chart(fig_box, use_container_width=True)
         
-        # Sección de preguntas para el reporte
         st.divider()
         st.subheader("Análisis de la distribución")
         pregunta_1 = st.radio("¿La distribución parece normal?", ["Sí", "No", "No estoy seguro"])
