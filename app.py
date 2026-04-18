@@ -2,9 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px 
 
-st.set_option('deprecation.showPyplotGlobalUse', False)
-
-st.set_page_config(page_title="Asistente Estadístico UPChiapas", layout="wide")
+st.set_page_config(page_title="Asistente Estadístico", layout="wide")
 
 st.title("📊 Asistente de Estadística - UPChiapas")
 
@@ -17,7 +15,7 @@ if archivo is not None:
     
     st.subheader("Vista previa")
     st.dataframe(df.head())
-
+    
     st.header("2. Visualización de Distribuciones")
     
     columnas_numericas = df.select_dtypes(include=['number']).columns
@@ -51,3 +49,4 @@ if archivo is not None:
     
 else:
     st.info("Esperando archivo CSV...")
+
