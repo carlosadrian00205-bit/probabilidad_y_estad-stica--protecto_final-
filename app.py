@@ -75,7 +75,7 @@ if archivo is not None:
         
         if clave_api:
             genai.configure(api_key=clave_api)
-            modelo = genai.GenerativeModel('gemini-1.5-flash')
+            modelo = genai.GenerativeModel('gemini-pro')
             
             pregunta = st.text_area("¿En qué te puedo ayudar?")
             
