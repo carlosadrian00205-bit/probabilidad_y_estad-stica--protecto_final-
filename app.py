@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px 
 import scipy.stats as stats 
 import google.generativeai as genai 
+import os
 
 st.set_page_config(page_title="Asistente Estadístico UPChiapas", layout="wide")
 
@@ -74,7 +75,9 @@ if archivo is not None:
         clave_api = st.text_input("Ingresa tu API Key de Gemini:", type="password")
         
         if clave_api:
+            os.environ['GOOGLE_API_KEY'] = clave_api
             genai.configure(api_key=clave_api)
+            
             modelo = genai.GenerativeModel('gemini-pro')
             
             pregunta = st.text_area("¿En qué te puedo ayudar?")
