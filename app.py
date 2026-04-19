@@ -68,37 +68,61 @@ if archivo is not None:
                     else:
                         st.success(f"✅ No hay evidencia para rechazar la Hipótesis Nula.")
                         
-        st.divider()
+                st.divider()
         st.header("🤖 4. Asistente Virtual IA")
         st.markdown("Hazle preguntas a Gemini sobre tus datos o conceptos de estadística.")
         
         clave_api = st.text_input("Ingresa tu API Key de Gemini:", type="password")
         
         if clave_api:
-            os.environ['GOOGLE_API_KEY'] = clave_api
-            genai.configure(api_key=clave_api)
-            
-            modelo = genai.GenerativeModel('gemini-1.5-flash')
-            
-            pregunta = st.text_area("¿En qué te puedo ayudar?")
-            
-            if st.button("Preguntar a la IA"):
-                if pregunta:
-                    with st.spinner("Analizando tus datos..."):
-                        try:
-                            resumen = df.describe().to_string()
-                            prompt = f"Eres un profesor de estadística de la UPChiapas. Te han subido unos datos cuyo resumen matemático es este:\n{resumen}\n\nResponde de forma clara a esta pregunta del alumno: {pregunta}"
-                            
-                            respuesta = modelo.generate_content(prompt)
-                            st.info(respuesta.text)
-                        except Exception as e:
-                            st.error(f"Error de conexión con la API: {e}")
-                else:
-                    st.warning("Escribe una pregunta antes de enviar.")
-        else:
-            st.warning("🔑 Consigue tu API Key gratuita en Google AI Studio y pégala arriba para activar la inteligencia artificial.")
+            try:
+                genai.configure(api_key=clave_api)
+                
+               
+                modelo = genai.GenerativeModel('gemini-2.5-flash')   
+                
+                pregunta = st.text_area("¿En qué te puedo ayudar?", key="pregunta_ia")
+                
+                if st.button("Preguntar a la IA"):
+                    if pregunta.strip():
+                        with st.spinner("Consultando a Gemini..."):
+                            try:
+                                
+                                resumen = df.describe(include='all').to_string()
+                                estadisticas_extra = f"""
+                                Columnas: {list(df.columns)}
+                                Filas: {len(df)}
+                                Variable seleccionada: {columna}
+                                Media: {df[columna].mean():.2f}
+                                Mediana: {df[columna].median():.2f}
+                                Desviación estándar: {df[columna].std():.2f}
+                                """
+                                
+                                prompt = f"""Eres un profesor experto en Probabilidad y Estadística de la UPChiapas.
+Tienes los siguientes datos del alumno:
 
-    else:
-        st.warning("El archivo no contiene columnas numéricas.")
+{resumen}
+
+{estadisticas_extra}
+
+Responde de forma clara, didáctica y profesional a esta pregunta del alumno:
+
+{pregunta}
+
+Explica conceptos si es necesario y relaciona con los datos proporcionados."""
+
+                                respuesta = modelo.generate_content(prompt)
+                                st.success("✅ Respuesta de Gemini:")
+                                st.markdown(respuesta.text)
+                                
+                            except Exception as e:
+                                st.error(f"Error al generar la respuesta: {str(e)}")
+                    else:
+                        st.warning("Por favor escribe una pregunta.")
+            except Exception as e:
+                st.error(f"Error al configurar la API de Gemini: {str(e)}")
+                st.info("🔍 Verifica que tu API Key sea correcta y que tenga habilitado el acceso a Gemini API.")
+        else:
+            st.warning("🔑 Pega tu API Key de Gemini arriba para activar el asistente virtual.")
 else:
     st.info("Esperando archivo CSV...")
