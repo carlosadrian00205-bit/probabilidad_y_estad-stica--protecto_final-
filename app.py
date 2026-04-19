@@ -78,7 +78,7 @@ if archivo is not None:
             os.environ['GOOGLE_API_KEY'] = clave_api
             genai.configure(api_key=clave_api)
             
-            modelo = genai.GenerativeModel('gemini-pro')
+            modelo = genai.GenerativeModel('gemini-1.5-flash')
             
             pregunta = st.text_area("¿En qué te puedo ayudar?")
             
