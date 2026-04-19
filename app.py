@@ -68,7 +68,7 @@ if archivo is not None:
                     else:
                         st.success(f"✅ No hay evidencia para rechazar la Hipótesis Nula.")
                         
-                st.divider()
+                        st.divider()
         st.header("🤖 4. Asistente Virtual IA")
         st.markdown("Hazle preguntas a Gemini sobre tus datos o conceptos de estadística.")
         
@@ -78,8 +78,8 @@ if archivo is not None:
             try:
                 genai.configure(api_key=clave_api)
                 
-               
-                modelo = genai.GenerativeModel('gemini-2.5-flash')   
+                # === MODELO ACTUALIZADO 2026 ===
+                modelo = genai.GenerativeModel('gemini-2.5-flash')   # ← Cambia aquí si quieres pro o lite
                 
                 pregunta = st.text_area("¿En qué te puedo ayudar?", key="pregunta_ia")
                 
@@ -87,7 +87,7 @@ if archivo is not None:
                     if pregunta.strip():
                         with st.spinner("Consultando a Gemini..."):
                             try:
-                                
+                                # Resumen más completo para que Gemini entienda mejor
                                 resumen = df.describe(include='all').to_string()
                                 estadisticas_extra = f"""
                                 Columnas: {list(df.columns)}
